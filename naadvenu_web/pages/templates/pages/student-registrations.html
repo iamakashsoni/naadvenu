@@ -1,0 +1,175 @@
+{% extends "base.html" %} {% load static %} {% block title %}Student Registration - Naadvenu{% endblock title %} {% block page_content %}
+<div class="form-container">
+    {% if student %}
+    <div class="card-content " style="width: 100%;">
+        <div class="card-header" style="background: none; ">
+            <h2 class="text-center" style="color: #F8F8FF !important;">Welcome, {{ student.user.username|title }} </h2>
+        </div>
+
+        <div class="card-body">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <form id="updateForm" method="POST">
+                {% csrf_token %}
+                <div class="row p-0">
+                    <div class="col-md-2 pl-0 pb-3">
+                        <img src="{{ student.photo.url }}" alt="Profile Photo" class="img m-0">
+                    </div>
+                    <div class="col-md-10  p-0">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="name" name="" value="{{ student.user.username|title }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ student.phone_number }}">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ student.email }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="date_of_birth" class="form-label">Date of Birth</label>
+                    <input type="text" class="form-control" id="date_of_birth" value="{{ student.date_of_birth }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="occupation" class="form-label">Occupation</label>
+                    <input type="text" class="form-control" id="occupation" value="{{ student.occupation|title }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" value="{{ student.address }}">
+                </div>
+                <div class="mb-3">
+                    <label for="account_status" class="form-label">Account Status</label>
+                    <input type="text" class="form-control" id="account_status" value="{{ student.account_status|title }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="level" class="form-label">Level</label>
+                    <input type="text" class="form-control" id="level" value="{{ student.level|title }}" readonly>
+                </div>
+                <div class="text-center mt-3" style="display:flex; justify-content:start">
+                    <button type="button" class="btn btn-primary animatedBtn" id="updateButton">Update</button>
+                    <button type="submit" class="btn btn-success d-none animatedBtn" id="submitButton">Submit</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {% else %}
+    <div class="row ">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <img src="{% static 'images/dummy-540X400.png' %}" alt="" width="100%" height="auto">
+            <div class="contact-text">
+                <p>
+                    Connect with us for any inquiries related to music, events, or classes. We're here to assist you in every way we can.
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-6 col-sm-12">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+
+            <form enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-3 col-md-12 col-sm-12 profile">
+                        <div class="circle">
+                            <img class="profile-pic" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg">
+
+                        </div>
+                        <div class="p-image">
+                            <i class="fa fa-camera upload-button" style="font-size: 30px;"></i>
+                            <input class="file-upload" type="file" accept="image/*" name="photo" />
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-12 col-sm-12">
+                        <input type="text" placeholder="Your name" class="form-control" name="name" value="{{ username }}" disabled/>
+                        <input type="date" class="form-control" name="date_of_birth" />
+                        <input type="text" placeholder="Your occupation" class="form-control" name="occupation" />
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <input type="text" placeholder="Your phone number" class="form-control" name="phone_number" />
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <input type="email" placeholder="Your email" class="form-control" name="email" value="{{ email }}" disabled/>
+                    </div>
+                    <div class="col-lg-12">
+                        <textarea placeholder="Address" class="form-control" name="address" rows="4"></textarea>
+                    </div>
+                    <div class="col-lg-12 ">
+                        <button class="btn btn-primary animatedBtn" style="float:left;">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var readURL = function(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('.profile-pic').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        $(".file-upload").on('change', function() {
+            readURL(this);
+        });
+
+        $(".upload-button").on('click', function() {
+            $(".file-upload").click();
+        });
+    });
+    document.getElementById('updateButton').addEventListener('click', function() {
+        // Select the Phone Number and Address inputs
+        var phoneNumberInput = document.getElementById('phone_number');
+        var addressInput = document.getElementById('address');
+        var emailInput = document.getElementById('email');
+
+        // Remove the readonly attribute from Phone Number and Address inputs
+        phoneNumberInput.removeAttribute('readonly');
+        addressInput.removeAttribute('readonly');
+        emailInput.removeAttribute('readonly');
+
+        // Hide the Update button and show the Submit button
+        document.getElementById('updateButton').classList.add('d-none');
+        document.getElementById('submitButton').classList.remove('d-none');
+    });
+</script>
+{% endblock page_content %}

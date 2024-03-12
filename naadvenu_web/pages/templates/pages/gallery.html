@@ -1,0 +1,150 @@
+{% extends "base.html" %} {% load static %} {% block title %}Gallery - Naadvenu{% endblock title %} {% block page_content %}
+<div class="gallery-container">
+    <div class="title">
+        <p>Infinite Melodies <br> Capturing the Spirit of Performers, Young and Old</p>
+    </div>
+    <div id="gallery" class="container-fluid">
+        {% for item in gallery_items %}
+        <div class="img-item">
+            <div class="img-wrapper">
+                {% if item.media_type == 'image' %}
+                <img src="{{ item.file.url }}" class="img-responsive" data-media-url="{{ item.file.url }}" data-media-title="{{ item.title }}" data-media-type="image"> {% elif item.media_type == 'video' %}
+                <video class="vid" controls data-media-url="{{ item.file.url }}" data-media-title="{{ item.title }}" data-media-type="video">
+                <source src="{{ item.file.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video> {% endif %}
+                <div class="img-label">{{ item.title|title }}</div>
+                <div class="like-share-container">
+                    {% if request.user in item.users_liked.all %}
+                    <form method="POST" action="{% url 'gallery' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ item.id }}">
+                        <button type="submit" class="btn btn-link unlike-button">
+                                <i class="fa-solid fa-heart like-icon mx-2"></i> <br>{{ item.like_count }} <!-- Show filled heart icon for unlike -->
+                            </button>
+                    </form>
+                    {% else %}
+                    <form method="POST" action="{% url 'gallery' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ item.id }}">
+                        <button type="submit" class="btn btn-link like-button">
+                                <i class="fa-regular fa-heart like-icon mx-2"></i> <br> {{ item.like_count }} <!-- Show regular heart icon for like -->
+                            </button>
+                    </form>
+                    {% endif %} {% if item.share_count == 0 %}
+                    <button class="btn btn-link share-button" data-slug="{{ item.slug }}" data-toggle="modal" data-target="#shareModal">
+                        <i class="fa fa-share-alt mx-2"></i> <br> Share
+                    </button>{% else %}
+                    <button class="btn btn-link share-button" data-slug="{{ item.slug }}" data-toggle="modal" data-target="#shareModal">
+                        <i class="fa fa-share-alt mx-2"></i> <br> Share
+                    </button> {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="modal fade px-3" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content px-3">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            <div class="modal-body">
+                <div>
+                    <div class="input-group">
+                        <input type="text" id="image-url" class="form-control" readonly>
+                    </div>
+                    <div class="modal-footer p-0">
+                        <button class="btn btn-primary m-0 my-2 animatedBtn text-white" type="button" onclick="copyToClipboard('image-url')">Copy URL</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+            </div>
+            <div class="modal-body" style="z-index: -1; vertical-align: middle;">
+                <div id="media-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $("img, video").click(function() {
+        var mediaUrl = $(this).data("media-url");
+        var mediaTitle = $(this).data("media-title");
+        var mediaType = $(this).data("media-type");
+
+        $("#exampleModalLabel").text(mediaTitle);
+
+        if (mediaType === "image") {
+            $("#media-container").html('<img src="' + mediaUrl + '" class="modal-img img-responsive">');
+        } else if (mediaType === "video") {
+            $("#media-container").html('<video class="modal-vid" style="width:100%" controls><source src="' + mediaUrl + '" type="video/mp4">Your browser does not support the video tag.</video>');
+        }
+
+        $("#myModal").modal("show");
+    });
+
+    function closeModal() {
+        $('#myModal').modal('hide');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var likeIcons = document.querySelectorAll('.like-icon');
+
+        likeIcons.forEach(function(likeIcon) {
+            likeIcon.addEventListener('click', function() {
+                likeIcon.classList.toggle('fa-regular');
+                likeIcon.classList.toggle('fa-solid');
+                if (likeIcon.classList.contains('fa-regular')) {
+                    likeIcon.classList.remove('fill-animation');
+                    setTimeout(function() {
+                        likeIcon.classList.add('fill-animation');
+                    }, 100);
+                } else {
+                    likeIcon.classList.remove('fill-animation');
+                    setTimeout(function() {
+                        likeIcon.classList.add('fill-animation');
+                    }, 100);
+                }
+            });
+        });
+    });
+    $('.share-button').on('click', function() {
+        var slug = $(this).data('slug');
+        // var mediaTitle = $(this).data("media-title");
+        var shareUrl = window.location.origin + '/gallery/' + slug + '/';
+        // $("#shareModalLabel").text(mediaTitle);
+        $('#image-url').val(shareUrl);
+        $('#shareModal').modal({
+            backdrop: false
+        }).modal('show');
+    });
+
+    function copyToClipboard(elementId) {
+        var input = document.getElementById(elementId);
+        input.select();
+        document.execCommand("copy");
+        // alert("URL copied to clipboard: " + input.value);
+    }
+</script>
+{% endblock page_content %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block title %} {{ item.title }} - Naadvenu {% endblock title %} {% block page_content %}
+<div class="gallery-container">
+    <div class="title">
+        <p>{{ item.title|title }}</p>
+    </div>
+    <div class="container-fluid">
+        <div class="img-item">
+            <div class="img-wrapper">
+                {% if item.media_type == 'image' %}
+                <img id="galleryImage" src="{{ item.file.url }}" class="img-responsive" data-image-url="{{ item.file.url }}" data-bs-toggle="modal" data-bs-target="#lightboxModal"> {% elif item.media_type == 'video' %}
+                <video controls class="vid" style="width:100% !important;">
+                        <source src="{{ item.file.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video> {% endif %}
+                <div class="like-share-container">
+                    <i class="fa-solid fa-heart like-icon mx-2"></i>{{ item.like_count }}
+                    <a href="#" target="_blank" class="btn btn-link share-button">
+                        <i class="fa fa-share-alt mx-2"></i> Share
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Attach JS script at bottom of body tag -->
+<script>
+    document.getElementById('galleryImage').addEventListener("click", () => {
+        const mediaUrl = document.getElementById('galleryImage').getAttribute('data-image-url');
+        document.getElementById('fullSizeImage').src = mediaUrl;
+        $('#lightboxModal').modal('show');
+    });
+</script>
+{% endblock page_content %}

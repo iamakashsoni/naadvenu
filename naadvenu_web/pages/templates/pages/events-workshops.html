@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% load static %} {% block title %}Events & Workshops - Naadvenu{% endblock title %} {% block page_content %}
+<div class="title">
+    <p>Eternal Harmonies<br> Embracing the Essence of Artists, Both New and Seasoned</p>
+</div>
+<div class="form-container">
+    <div class="blog-posts">
+        <div class="all-blog-posts">
+            <div class="row">
+                {% for event in events %}
+                <div class="col-lg-6">
+                    <div class="blog-post">
+                        <div class="blog-thumb">
+                            <img src="{{ event.images.url }}" alt="{{ event.title }}">
+                        </div>
+                        <div class="down-content">
+                            <h1><span class="text-danger">{{ event.title }}</span> | {{ event.date }}</h1>
+                            <p>{{ event.description|safe }}</p>
+                            <div class="post-options">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div style="float: left;"><i class="fa-regular fa-heart like-icon"></i>
+                                            <span>{{ event.like_count }}</span> Likes
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div style="float: right;"><i class="fa fa-share-alt"></i>
+                                            <span>{{ event.share_count }}</span> Shares
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var likeIcon = document.querySelector('.like-icon');
+
+        likeIcon.addEventListener('click', function() {
+            likeIcon.classList.toggle('fa-regular');
+            likeIcon.classList.toggle('fa-solid');
+            if (likeIcon.classList.contains('fa-regular')) {
+                likeIcon.classList.remove('fill-animation');
+                setTimeout(function() {
+                    likeIcon.classList.add('fill-animation');
+                }, 100);
+            } else {
+                likeIcon.classList.remove('fill-animation');
+                setTimeout(function() {
+                    likeIcon.classList.add('fill-animation');
+                }, 100);
+            }
+        });
+    });
+</script>
+{% endblock page_content %}

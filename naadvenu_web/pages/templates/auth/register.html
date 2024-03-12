@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% load static %} {% block title %}Register - Naadvenu{% endblock title %} {% block page_content %}
+<div class="title">
+    <p>Embark on Your Musical Journey<br>Access the Realm of Indian Classical Flutes</p>
+</div>
+
+<div class="form-container">
+    <div class="row ">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="row" style="display: flex; flex-direction: column;">
+                    <h1><span class="text-danger">Register</span></h1>
+                    <div class="col-lg-12">
+                        <input type="text" class="form-control" id="name" placeholder="Your full name" name="username">
+                    </div>
+                    <div class="col-lg-12">
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Your email" name="email">
+                    </div>
+                    <div class="col-lg-12">
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password1">
+                    </div>
+                    <div class="col-lg-12">
+                        <input type="password" class="form-control" id="inputPassword2" placeholder="Re-enter Password" name="password2">
+                    </div>
+
+                    <div class="col-lg-12 ">
+                        <button type="submit" class="btn btn-primary animatedBtn" style="float:left;">Register</button>
+                    </div>
+                    <span style="margin-top: 10px;">Already have an account? <a href="{% url 'login' %}" style="color: #f57b50;">Login</a></span>
+                </div>
+            </form>
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <hr>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <img src="{% static 'images/dummy-540X400.png' %}" alt="" width="100%" height="auto">
+        </div>
+    </div>
+</div>
+{% endblock page_content %}
