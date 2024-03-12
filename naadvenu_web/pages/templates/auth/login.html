@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% load static %} {% block title %}Login - Naadvenu{% endblock title %} {% block page_content %}
+<div class="title">
+    <p>Embark on Your Musical Journey<br>Access the Realm of Indian Classical Flutes</p>
+</div>
+
+<div class="form-container">
+    <div class="row ">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <img src="{% static 'images/dummy-540X400.png' %}" alt="" width="100%" height="auto">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="row" style="display: flex; flex-direction: column;">
+                    <h1><span class="text-danger">Login</span></h1>
+                    <div class="col-lg-12">
+                        <input type="text" class="form-control" id="inputUsername" placeholder="Your username" name="username">
+                    </div>
+                    <div class="col-lg-12">
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password">
+                    </div>
+
+                    <div class="col-lg-12 ">
+                        <button type="submit" class="btn btn-primary animatedBtn" style="float:left;">Submit</button>
+                    </div>
+                    <span style="margin-top: 10px;">Don't have an account? <a href="{% url 'register' %}" style="color: #f57b50;">Register</a></span>
+                </div>
+            </form>
+
+            <hr>
+        </div>
+    </div>
+</div>
+{% endblock page_content %}

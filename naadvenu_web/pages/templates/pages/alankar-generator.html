@@ -1,0 +1,83 @@
+{% extends "base.html" %}{% load static %} {% block title %}Alankar Generator - Naadvenu{% endblock title %}{% block page_content %}
+<div class="contact-page">
+    <div class="contact">
+        <div class="title">
+            <p>MelodyForge: Crafting Sa Re Ga Ma Pa Dha Ni
+            </p>
+        </div>
+        <div class="row card">
+            <form method="POST" class="card-body">
+                {% csrf_token %}
+                <input type="text" id="swar_notation" name="swar_notation" readonly placeholder="Swars" required class="form-control" />
+                <div class="swars">
+                    <button type="button" class="swar" value="0" onclick="updateSwarNotation('0', 'सा')">
+                  सा
+                </button>
+                    <button type="button" class="swar" value="1" onclick="updateSwarNotation('1', 'रे')">
+                  रे
+                </button>
+                    <button type="button" class="swar" value="2" onclick="updateSwarNotation('2', 'ग')">
+                  ग
+                </button>
+                    <button type="button" class="swar" value="3" onclick="updateSwarNotation('3', 'म')">
+                  म
+                </button>
+                    <button type="button" class="swar" value="4" onclick="updateSwarNotation('4', 'प')">
+                  प
+                </button>
+                    <button type="button" class="swar" value="5" onclick="updateSwarNotation('5', 'ध')">
+                  ध
+                </button>
+                    <button type="button" class="swar" value="6" onclick="updateSwarNotation('6', 'नि')">
+                  नि
+                </button>
+                    <button type="button" class="swar" value="7" onclick="updateSwarNotation('7', 'सां')">
+                  सां
+                </button>
+                </div>
+                <div class="actionButton mt-4">
+                    <button type="submit" class=" btn btn-primary animatedBtn">Generate</button>
+                    <button type="button" class=" btn btn-danger" onclick="clearSwarNotation()">
+                  Clear
+                </button>
+                </div>
+
+                <input type="hidden" id="hidden_swar_notation" name="hidden_swar_notation" />
+            </form>
+            {% if aroh %}
+            <p class="result-label">आरोह:</p>
+            <p class="result-value result-value-aroh">{{ aroh|join:" " }}</p>
+            {% else %}
+            <!-- Handle the case when aroh is empty -->
+            {% endif %} {% if avaroh %}
+            <p class="result-label">अवरोह:</p>
+            <p class="result-value">{{ avaroh|join:" " }}</p>
+            {% else %}
+            <p>Select phrases</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateSwarNotation(buttonValue, swarCharacter) {
+        var swarNotationInput = document.getElementById("swar_notation");
+        swarNotationInput.value += swarCharacter;
+        updateHiddenInput(buttonValue);
+    }
+
+    function updateHiddenInput(buttonValue) {
+        var hiddenInput = document.getElementById("hidden_swar_notation");
+        hiddenInput.value += buttonValue;
+    }
+
+    function clearSwarNotation() {
+        var swarNotationInput = document.getElementById("swar_notation");
+        var hiddenInput = document.getElementById("hidden_swar_notation");
+        swarNotationInput.value = "";
+        hiddenInput.value = "";
+    }
+</script>
+
+{% endblock page_content %}

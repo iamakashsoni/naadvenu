@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block title %} {{ item.title }} - Naadvenu {% endblock title %} {% block page_content %}
+<div class="gallery-container">
+    <div class="title">
+        <p>{{ item.title|title }}</p>
+    </div>
+    <div class="container-fluid">
+        <div class="img-item">
+            <div class="img-wrapper">
+                <img id="galleryImage" src="{{ item.image.url }}" class="img-responsive" data-image-url="{{ item.image.url }}" data-image-title="{{ item.title }}" data-bs-toggle="modal" data-bs-target="#lightboxModal">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Attach JS script at bottom of body tag -->
+<script>
+    document.getElementById('galleryImage').addEventListener("click", () => {
+        const imgUrl = document.getElementById('galleryImage').getAttribute('data-image-url');
+        document.getElementById('fullSizeImage').src = imgUrl;
+        $('#lightboxModal').modal('show');
+    });
+</script>
+{% endblock page_content %}
