@@ -139,7 +139,7 @@ def studentRegistration(request):
             email = request.user.email
             return render(request, "pages/student-registrations.html", {'username': username, 'email': email})
 
-
+@login_required
 def generate_sargam(swar_notation):
     swar=["सा","रे","ग","म","प","ध","नि","सां"]
     sub=""
@@ -231,6 +231,7 @@ def generate_sargam(swar_notation):
     
     return aroh, avroh
 
+@login_required
 def alankarGenerator(request):
     aroh, avaroh = [], []
     if request.method == 'POST':
